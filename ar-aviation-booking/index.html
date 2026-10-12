@@ -453,6 +453,13 @@ html[lang="th"] body *{word-break:normal;overflow-wrap:break-word}
 @media (max-width:480px){.bl-video-grid{grid-template-columns:minmax(0,1fr) !important}.bl-video-card.vertical{max-width:100%}}
 /* iOS Safari zooms the page when focusing inputs under 16px */
 input,select,textarea{font-size:16px !important}
+/* floating "Contact Us" button above the WhatsApp pill -> scrolls to the contact form */
+.bl-contact-float{position:fixed;bottom:92px;right:28px;z-index:200;display:flex;align-items:center;gap:10px;background:#fff;color:#1E1E54;padding:14px 20px;border-radius:50px;text-decoration:none;font-family:"Barlow Condensed","Noto Sans Thai",sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 4px 24px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s,opacity .25s}
+.bl-contact-float:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.45);color:#1E1E54}
+.bl-contact-float svg{width:22px;height:22px;fill:#E8602C;flex-shrink:0}
+.bl-contact-float.bl-hide{opacity:0;pointer-events:none;transform:translateY(8px)}
+html[lang="ar"] .bl-contact-float{right:auto;left:28px}
+@media (max-width:768px){.bl-contact-float{padding:14px;bottom:112px}.bl-contact-float span{display:none}}
 /* keep the page from scrolling behind the open mobile menu */
 #blMobileMenu.open{overscroll-behavior:contain;touch-action:none}
 </style>
@@ -1332,5 +1339,7 @@ if ((document.body.className || '').match(/\bpage-id-\d+\b/)) {
 }
 </script>
 <!-- bl-page-css prod end -->
+<a class="bl-contact-float" href="/ar-home/#bl-contact" aria-label="اتصل بنا"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><span>اتصل بنا</span></a>
+<script>(function(){var b=document.querySelector(".bl-contact-float"),s=document.getElementById("bl-contact");if(!b||!s||!document.querySelector(".bl-submit-btn")||!("IntersectionObserver" in window))return;new IntersectionObserver(function(e){b.classList.toggle("bl-hide",e[0].isIntersecting)},{threshold:.15}).observe(s)})();</script>
 </body>
 </html>
