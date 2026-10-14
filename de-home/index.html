@@ -836,20 +836,24 @@ html[lang="ar"] .bl-contact-float{right:auto;left:28px}
 <p class="bl-contact-sub-text">Mehrere Wege, uns zu erreichen. In Chiang Mai ans&auml;ssig, immer schnell erreichbar.</p>
 <div class="bl-contact-grid">
 <div class="bl-contact-form-wrap">
+<form id="bl-cf" novalidate>
 <h3>KONTAKTIEREN SIE UNS</h3>
 <p>Buchen Sie einen Flug, registrieren Sie Ihr Interesse f&uuml;r kommende Erlebnisse oder stellen Sie uns eine Frage. Wir antworten innerhalb von 24 Stunden.</p>
 <div class="bl-form-row">
-<div class="bl-fg"><label>Vollst&auml;ndiger Name</label><input type="text" placeholder="Ihr Name"></div>
-<div class="bl-fg"><label>E-Mail</label><input type="email" placeholder="ihre@email.com"></div>
+<div class="bl-fg"><label>Vollst&auml;ndiger Name</label><input type="text" name="name" required maxlength="200" placeholder="Ihr Name"></div>
+<div class="bl-fg"><label>E-Mail</label><input type="email" name="email" required maxlength="254" placeholder="ihre@email.com"></div>
 </div>
-<div class="bl-fg"><label>Telefon / WhatsApp</label><input type="tel" placeholder="+49 oder international"></div>
+<div class="bl-fg"><label>Telefon / WhatsApp</label><input type="tel" name="phone" maxlength="50" placeholder="+49 oder international"></div>
 <div class="bl-fg">
           <label>Ich interessiere mich f&uuml;r</label><br />
-          <select><option value="">Erlebnis ausw&auml;hlen</option><option value="Gyrocopter Flight">&#9992; Tragschrauber-Flug</option><option value="Ultralight Flight">Ultraleichtflug</option><option value="Eagle Hunt">Adlerjagd &mdash; Interesse registrieren</option><option value="Motorbike Tour">Luxus-Motorradtour &mdash; Interesse registrieren</option><option value="General">Allgemeine Anfrage</option></select>
+          <select name="interest"><option value="">Erlebnis ausw&auml;hlen</option><option value="Gyrocopter Flight">&#9992; Tragschrauber-Flug</option><option value="Ultralight Flight">Ultraleichtflug</option><option value="Eagle Hunt">Adlerjagd &mdash; Interesse registrieren</option><option value="Motorbike Tour">Luxus-Motorradtour &mdash; Interesse registrieren</option><option value="General">Allgemeine Anfrage</option></select>
         </div>
-<div class="bl-fg"><label>Nachricht</label><textarea placeholder="Teilen Sie uns Ihre Daten, Gruppengr&ouml;&szlig;e oder Fragen mit..."></textarea></div>
-<p>        <button class="bl-submit-btn">NACHRICHT SENDEN &#8594;</button></p>
+<div class="bl-fg"><label>Nachricht</label><textarea name="message" required maxlength="1500" placeholder="Teilen Sie uns Ihre Daten, Gruppengr&ouml;&szlig;e oder Fragen mit..."></textarea></div>
+<div class="cf-turnstile" data-sitekey="0x4AAAAAAFWjRv6xgSueFJaA" data-size="flexible" data-callback="blCfTok" style="margin-top:12px"></div>
+<p>        <button type="submit" class="bl-submit-btn">NACHRICHT SENDEN &#8594;</button></p>
+<p id="bl-cf-status" aria-live="polite" style="min-height:20px;margin-top:10px;font-size:14px;text-align:center;color:#fff"></p>
 <p style="color:rgba(255,255,255,.25);font-size:12px;margin-top:12px;text-align:center;line-height:1.5">Direkt an unser Team gesendet &mdash; wir antworten innerhalb von 24 Stunden</p>
+</form>
 </div>
 <div>
 <div class="bl-c-ch">
@@ -1571,5 +1575,30 @@ if ((document.body.className || '').match(/\bpage-id-\d+\b/)) {
 <!-- bl-page-css prod end -->
 <a class="bl-contact-float" href="#bl-contact" aria-label="Kontakt"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><span>Kontakt</span></a>
 <script>(function(){var b=document.querySelector(".bl-contact-float"),s=document.getElementById("bl-contact");if(!b||!s||!document.querySelector(".bl-submit-btn")||!("IntersectionObserver" in window))return;new IntersectionObserver(function(e){b.classList.toggle("bl-hide",e[0].isIntersecting)},{threshold:.15}).observe(s)})();</script>
+<script>(function(){
+var M={"ok": "Danke! Wir antworten innerhalb von 24 Stunden per E-Mail.", "err": "Entschuldigung, etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie uns per WhatsApp.", "long": "Nachricht zu lang, bitte kürzen.", "verify": "Bitte kurz auf die Sicherheitsprüfung warten und dann erneut senden.", "fill": "Bitte Namen, eine gültige E-Mail-Adresse und eine Nachricht angeben.", "interest": "Interesse an"},HUB="https://inbox.gordonlee.xyz/forms/tpbls",form=document.getElementById('bl-cf');if(!form)return;
+var st=document.getElementById('bl-cf-status'),btn=form.querySelector('button[type=submit]'),loaded=false;
+function load(){if(loaded)return;loaded=true;var s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js';s.async=true;document.head.appendChild(s);}
+form.addEventListener('focusin',load);
+if('IntersectionObserver' in window){new IntersectionObserver(function(e,o){if(e[0].isIntersecting){load();o.disconnect();}},{rootMargin:'400px'}).observe(form);}else{load();}
+window.blCfTok=function(){};
+function reset(){if(window.turnstile)try{window.turnstile.reset();}catch(e){}}
+form.addEventListener('submit',async function(e){
+  e.preventDefault();st.textContent='';
+  var f=form.elements,name=f.name.value.trim(),email=f.email.value.trim(),phone=f.phone.value.trim(),msg=f.message.value.trim(),tok=(f['cf-turnstile-response']||{}).value||'';
+  if(!name||!msg||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){st.textContent=M.fill;return;}
+  if(!tok){load();st.textContent=M.verify;return;}
+  var interest=f.interest&&f.interest.value;
+  var text=(interest&&interest!=='General'?M.interest+': '+interest+'\n\n':'')+msg;
+  btn.disabled=true;
+  try{
+    var r=await fetch(HUB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,phone:phone,message:text,'cf-turnstile-response':tok})});
+    if(r.status===413){st.textContent=M.long;reset();return;}
+    if(!r.ok)throw new Error('status '+r.status);
+    form.reset();st.textContent=M.ok;reset();
+  }catch(err){st.textContent=M.err;reset();}
+  finally{btn.disabled=false;}
+});
+})();</script>
 </body>
 </html>
