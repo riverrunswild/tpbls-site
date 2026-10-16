@@ -1630,7 +1630,7 @@ if ((document.body.className || '').match(/\bpage-id-\d+\b/)) {
 <script>(function(){
 var M={"ok": "شكرًا! سنرد عليك بالبريد الإلكتروني خلال 24 ساعة.", "err": "عذرًا، حدث خطأ. يرجى المحاولة مرة أخرى أو التواصل معنا عبر واتساب.", "long": "الرسالة طويلة جدًا، يرجى اختصارها.", "verify": "يرجى الانتظار لحظة لإتمام التحقق الأمني ثم الإرسال مرة أخرى.", "fill": "يرجى إدخال الاسم وبريد إلكتروني صالح ورسالة.", "interest": "مهتم بـ"},HUB="https://inbox.gordonlee.xyz/forms/tpbls",form=document.getElementById('bl-cf');if(!form)return;
 var st=document.getElementById('bl-cf-status'),btn=form.querySelector('button[type=submit]'),loaded=false;
-function load(){if(loaded)return;loaded=true;var s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js';s.async=true;document.head.appendChild(s);}
+function load(){if(loaded)return;loaded=true;var w=form.querySelector('.cf-turnstile');if(w&&w.offsetWidth<300)w.setAttribute('data-size','compact');var s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js';s.async=true;document.head.appendChild(s);}
 form.addEventListener('focusin',load);
 if('IntersectionObserver' in window){new IntersectionObserver(function(e,o){if(e[0].isIntersecting){load();o.disconnect();}},{rootMargin:'400px'}).observe(form);}else{load();}
 window.blCfTok=function(){};
